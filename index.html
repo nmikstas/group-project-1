@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Station</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!--Reset Styling-->
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <!--Personal Styling-->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+
+<body class="d-flex flex-column" id="main-body">
+    <header class="header-class">Weather Station</header>
+
+    <!--Main content body-->
+    <div id="page-body">
+        <div class="container-fluid bg-white px-4 py-4 my-4">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="search">
+                        <div class="form-group px-4">
+                            <label for="weather-input">Search by <b>City, Country(or State)</b> -OR- by <b>5 Digit ZIP Code</b></label>
+                            <input class="form-control form-input" id="weather-input" type="text">
+                            <input class="btn btn-secondary form-btn ml-3" id="weather-search" type="submit" value="Search">
+                        </div>        
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-10">
+                    <h2>Weather Stations</h2>
+                    <div id="weather"></div>
+                </div>
+
+                <div class = "col-md-2">
+                    <h2>Quick Links</h2>
+                    <div id="links"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer id="sticky-footer" class="pt-4 pb-1 text-white-50">
+        <div class="container text-center">
+            <small>&copy; Nick Mikstas - nmikstas@alumni.scu.edu</small>
+        </div>
+    </footer>
+
+    <!--jQuery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!--Moment.js-->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+
+    <!-- Firebase References -->
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+
+    <!--Google Maps-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqGvLLVncYgbH7VVkbzyvxh-fYzX-vxb0&callback=initMap" async defer></script>
+
+    <!--Javascript-->
+    <script src="assets/js/javascript.js"></script>
+</body>
+
+</html>
