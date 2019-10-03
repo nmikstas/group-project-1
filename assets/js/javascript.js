@@ -255,12 +255,12 @@ class AClock
 
 /**************************************** Wind Vane Class ****************************************/
 //Options bit flags.
-const HIDE_N           = 0x01; //Hide the letter N.
-const HIDE_ESW         = 0x02; //Hide the letters E, S and W.
-const HIDE_MAJOR_TICK2 = 0x04; //Hide the major ticks.
-const HIDE_MINOR_TICK2 = 0x08; //Hide the minor ticks.
-const HIDE_CENTER2     = 0x10; //Hide the center circle.
-const HIDE_ARROW       = 0x20; //Hide the arrow.
+const HIDE_N           = 0x01; //Set = hide the letter N.
+const HIDE_ESW         = 0x02; //Set = hide the letters E, S and W.
+const HIDE_MAJOR_TICK2 = 0x04; //Set = hide the major ticks.
+const HIDE_MINOR_TICK2 = 0x08; //Set = hide the minor ticks.
+const HIDE_CENTER2     = 0x10; //Set = hide the center circle.
+const HIDE_ARROW       = 0x20; //Set = hide the arrow.
 
 class AWind
 {
@@ -417,7 +417,7 @@ class AWind
             this.drawLineAngle2(this.direction + Math.PI, this.direction + Math.PI,
                                 this.arrowColor, this.arrowWidth, 0, this.radius * .80);
 
-            //Draw front arrow.
+            //Draw arrow front.
             this.drawLineAngle2(this.direction + Math.PI, this.direction + Math.PI + .2,
                                 this.arrowColor, this.pointerWidth, this.radius * .78,
                                 this.radius * .60);
@@ -467,6 +467,23 @@ class AWind
         this.ctx.stroke();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /******************************************* Top Level *******************************************/
 //Open weather map configuration.
@@ -644,12 +661,13 @@ function addStation(response)
         $("#weather-input").addClass("is-invalid");
         return;
     }
-
+    
     //Push the validated data to Firebase.
     database.ref('stations').push
     ({
         stationObj: JSON.stringify(response),
-        dateAdded: firebase.database.ServerValue.TIMESTAMP
+        dateAdded:  firebase.database.ServerValue.TIMESTAMP,
+        localTS:    JSON.stringify(moment())
     });
     
     //Clear the input text box.
@@ -666,28 +684,27 @@ stationRef.on("child_added", function(snapshot)
 
     //----------------------- Variable Extraction ------------------------
     var  stationObj = JSON.parse(sv.stationObj);  //Extract station object data.
+    if(debug) console.log(stationObj);
 
     //Extract desired variables from the station data set.
-    var name = stationObj.weatherObj.name;
-    var lat = stationObj.weatherObj.coord.lat;
-    var lon = stationObj.weatherObj.coord.lon;
-    var timeZone = stationObj.weatherObj.timezone;
-    var isZip = stationObj.isZip;
+    var localTS   = JSON.parse(sv.localTS);
+    var name      = stationObj.weatherObj.name;
+    var lat       = stationObj.weatherObj.coord.lat;
+    var lon       = stationObj.weatherObj.coord.lon;
+    var timeZone  = stationObj.weatherObj.timezone;
+    var isZip     = stationObj.isZip;
     var zipString = stationObj.zipString;
-    var city = stationObj.city;
-    var country = stationObj.country;
+    var city      = stationObj.city;
+    var country   = stationObj.country;
     var windSpeed = stationObj.weatherObj.wind.speed;
-    var windDeg = Math.round(stationObj.weatherObj.wind.deg);
-
-
-
+    var windDeg   = Math.round(stationObj.weatherObj.wind.deg);
 
 
 
 
 
     
-    if(debug) console.log(stationObj);
+    
 
     //------------------- Create Weather Station Card --------------------
     var card = $("<div>");
@@ -808,9 +825,17 @@ stationRef.on("child_added", function(snapshot)
     //Add a wind vane div.
     var vaneDiv = $("<div>");
     vaneDiv.addClass("border vane-div station-div mr-1");
-    vaneDiv.append("Wind Speed: " + windSpeed + " m/s<br>");
-    vaneDiv.append("Wind Dir: " + windDeg + " Degrees");
     cardBody.append(vaneDiv);
+
+    var vaneSpeed = $("<div>");
+    vaneSpeed.html("Wind Speed: " + windSpeed + " m/s<br>");
+    vaneSpeed.attr("id", "vane-speed" + idNum);
+    vaneDiv.append(vaneSpeed);
+
+    var vaneDir = $("<div>");
+    vaneDir.html("Wind Dir: " + windDeg + " Degrees");
+    vaneDir.attr("id", "vane-dir" + idNum);
+    vaneDiv.append(vaneDir);
 
     var vaneID  = "vane-canvas" + idNum;
     var vaneCan = document.createElement("canvas");
@@ -822,6 +847,10 @@ stationRef.on("child_added", function(snapshot)
     //Create the wind vane object.
     var vane = new AWind(document.getElementById(vaneID));
     vane.draw(windDeg);
+
+
+
+
 
 
 
@@ -843,23 +872,63 @@ stationRef.on("child_added", function(snapshot)
         var localTime = utcTime +(timeZone * 1000);
         clock.draw(moment(localTime));
         dTime.text(moment(localTime).format("hh:mm:ss A"));
+
+        //Here we check if the weather info needs to be updated.  The database only updates
+        //once every 10 minutes so we will check every 10 minutes and 10 seconds.
+        if(moment().diff(localTS) > 10 * 60 * 1000 + 10000)
+        {
+            if(debug)console.log("Updating " + name);
+
+            //Make sure we don't constantly update by changing the time stamp.
+            localTS = moment();
+
+            //Build the query URL string.
+            var queryString = isZip ? "zip=" + zipString + ",us" :
+            "q=" + city + "," + country;
+            var queryURL = baseURL + queryString + APIKey;
+
+            //Query the weather API database.
+            $.ajax
+            ({
+                url: queryURL,
+                method: "GET",
+
+                //Something went wrong.
+                error: function(errorThrown)
+                {
+                    if(debug) console.log(errorThrown);
+                },
+
+                //Update the weather data.
+                success: function(response)
+                {
+                    if(debug) console.log(response);
+
+                    //----------------Do All Updates Here-----------------
+                    //Update the wind.
+                    windSpeed = response.wind.speed;
+                    windDeg   = Math.round(response.wind.deg);
+                    vaneSpeed.html("Wind Speed: " + windSpeed + " m/s<br>");
+                    vaneDir.html("Wind Dir: " + windDeg + " Degrees");
+                    vane.draw(windDeg);
+
+
+                    
+
+
+
+
+
+
+
+
+
+
+
+                }
+            });
+        }
     }, 200);
-
-    //This function updates the weather info every 10 minutes and 10 seconds. The open
-    //weather map API only updates its database every 10 minutes.
-    setInterval(function()
-    {
-
-
-
-
-
-
-
-
-
-
-    }, 610000);
 
     //Always update idNum so everything can have a unique ID.
     idNum++;
