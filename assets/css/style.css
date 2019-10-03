@@ -74,11 +74,6 @@ th
     margin-bottom: 20px;
 }
 
-.station-div
-{
-    display: inline-block;
-}
-
 .search
 {
     border: 3px solid #666666;
@@ -96,18 +91,27 @@ th
     width: 10%;
 }
 
-.gmap-div
+.station-div
 {
+    display: inline-block;
+    text-align: center;
     width: 200px;
     height: 200px;
 }
 
+.gmap-div
+{
+    
+}
+
 .clock-div
 {
-    text-align: center;
-    width: 200px;
-    height: 200px;
     background-color: rgb(222, 238, 223);
+}
+
+.vane-div
+{
+    background-color: rgb(243, 226, 226);
 }
 
 .header-btn
