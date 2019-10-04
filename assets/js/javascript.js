@@ -38,7 +38,7 @@ function validateInput()
     var zipString = "";
     var zip;
     var country;
-    var city;
+    var city; 
     
     //Assume the user input is valid.
     $("#weather-input").removeClass("is-invalid");
