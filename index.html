@@ -18,7 +18,49 @@
 </head>
 
 <body class="d-flex flex-column" id="main-body">
-    <header class="header-class">Weather Station</header>
+    
+    <!-- Log-in Modal -->
+    <div id="myModal" class="modal-background">
+        <div class="modal-content container">
+            
+            <div class="card card-default">
+                <div class="card-header"><h1>Welcome to the Weather Station!</h1></div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-group row">
+                            <label for="email-input">User Email</label>
+                            <input class="form-control" id="email-input" type="text">
+                        </div>
+        
+                        <div class="form-group row">
+                            <label for="password-input">Password</label>
+                            <input class="form-control" id="password-input" type="password">
+                        </div>
+
+                        <div id="password-error"></div>
+                                
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-secondary m-2" id="login" type="submit">Log In</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-secondary m-2" id="signup" type="submit">Sign Up</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <header class="header-class">
+        <div class="header-title">Weather Station</div>
+        <div class="header-right">
+            <div class="header-user">Logged In User: None</div>
+            <button class="btn btn-secondary m-2" id="logout" type="submit">Log Out</button>
+        </div>
+    </header>
 
     <!--Main content body-->
     <div id="page-body">
@@ -66,7 +108,8 @@
     <!-- Firebase References -->
     <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-auth.js"></script>
+ 
     <!--Google Maps-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqGvLLVncYgbH7VVkbzyvxh-fYzX-vxb0&callback=initMap" async defer></script>
 
