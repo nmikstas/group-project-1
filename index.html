@@ -6,7 +6,7 @@
     <title>Weather Station</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <!--Reset Styling-->
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 
@@ -18,27 +18,29 @@
 </head>
 
 <body class="d-flex flex-column" id="main-body">
-    
+
     <!-- Log-in Modal -->
     <div id="myModal" class="modal-background">
         <div class="modal-content container">
-            
+
             <div class="card card-default">
-                <div class="card-header"><h1>Welcome to the Weather Station!</h1></div>
+                <div class="card-header">
+                    <h1>Welcome to the Weather Station!</h1>
+                </div>
                 <div class="card-body">
                     <form>
                         <div class="form-group row">
                             <label for="email-input">User Email</label>
                             <input class="form-control" id="email-input" type="text">
                         </div>
-        
+
                         <div class="form-group row">
                             <label for="password-input">Password</label>
                             <input class="form-control" id="password-input" type="password">
                         </div>
 
                         <div id="password-error"></div>
-                                
+
                         <div class="row">
                             <div class="col-md-6">
                                 <button class="btn btn-secondary m-2" id="login" type="submit">Log In</button>
@@ -54,38 +56,46 @@
         </div>
     </div>
 
-    <header class="header-class">
-        <div class="header-title">Weather Station</div>
-        <div class="header-right">
-            <div class="header-user">Logged In User: None</div>
-            <button class="btn btn-secondary m-2" id="logout" type="submit">Log Out</button>
-        </div>
-    </header>
+    <div class=row>
+        <nav class="navbar navbar-dark" style="color: white; background-color: rgba(52,58,64, 0.5)">
+            <a class="navbar-brand"> <img src="assets/images/small-umbrella-outline-icon.png" alt="umbrella">Weather
+                Station</a>
+            <form class="search">
+                <div class="col-3"></div>
+                <div class="form-group px-4">
+                    <label for="weather-input">Search by <b>City, Country,</b> -OR- by <b>5 Digit ZIP
+                            Code</b></label>
+                    <input class="form-control form-input" id="weather-input"
+                        placeholder="Type Your Favorite Destination and Press ENTER" type="text">
+                    <input class="btn btn-secondary form-btn ml-3" id="weather-search" type="submit" value="Search">
+                </div>
+            </form>
+            <div class="col-2">
+                <span class="navbar-text">Logged In User: None</span>
+                <button class="btn btn-secondary m-2" id="logout" type="submit">Log Out</button>
+            </div>
+    </div>
+    </nav>
+
 
     <!--Main content body-->
     <div id="page-body">
-        <div class="container-fluid bg-white px-4 py-4 my-4">
+        <div class="container-fluid px-4 py-4 my-4" style="background-color: rgba(52,58,64, 0.5)">
 
             <div class="row">
                 <div class="col-md-12">
-                    <form class="search">
-                        <div class="form-group px-4">
-                            <label for="weather-input">Search by <b>City, Country(or State)</b> -OR- by <b>5 Digit ZIP Code</b></label>
-                            <input class="form-control form-input" id="weather-input" type="text">
-                            <input class="btn btn-secondary form-btn ml-3" id="weather-search" type="submit" value="Search">
-                        </div>        
-                    </form>
+
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-10">
-                    <h2>Weather Stations</h2>
+                <div class="col-md-9">
+                    <h2>Stations</h2>
                     <div id="weather"></div>
                 </div>
 
-                <div class = "col-md-2">
-                    <h2>Quick Links</h2>
+                <div class="col-md-3">
+                    <h2>Your Favorites</h2>
                     <div id="links"></div>
                 </div>
             </div>
@@ -93,9 +103,9 @@
         </div>
     </div>
 
-    <footer id="sticky-footer" class="pt-4 pb-1 text-white-50">
+    <footer id="sticky-footer" class="pt-4 pb-1">
         <div class="container text-center">
-            <small>Nick Mikstas, Tyler Webb, Chris Laughter and Elijah Lanza - Group Project 1</small>
+            <small> Copyright &copy; Nick Mikstas, Tyler Webb, Chris Laughter and Elijah Lanza - Group Project 1</small>
         </div>
     </footer>
 
@@ -109,9 +119,10 @@
     <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-auth.js"></script>
- 
+
     <!--Google Maps-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqGvLLVncYgbH7VVkbzyvxh-fYzX-vxb0&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqGvLLVncYgbH7VVkbzyvxh-fYzX-vxb0&callback=initMap"
+        async defer></script>
 
     <!--Javascript-->
     <script src="assets/js/aclock.js"></script>

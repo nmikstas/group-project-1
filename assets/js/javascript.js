@@ -111,7 +111,7 @@ firebase.auth().onAuthStateChanged(function(user)
        
         //Get user email to display on the webpage.
         var userEmail = user.email
-        $(".header-user").text("Logged In User: " + userEmail);
+        $(".navbar-text").text("Logged In User: " + userEmail);
 
         // User is signed in.
         if(debug)console.log("Signed in");
@@ -390,7 +390,7 @@ function runPage()
         //------------------------ Quick Link Button -------------------------
         var linkBtn = $("<button>");
         linkBtn.addClass("btn btn-secondary header-btn mx-1");
-        linkBtn.text("Quick Link");
+        linkBtn.text("Add To Favorites");
         linkBtn.attr("id", "link-btn" + idNum);
         cardHeader.append(linkBtn);
 
