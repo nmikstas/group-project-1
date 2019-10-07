@@ -75,11 +75,11 @@ class ATemp
         this.radiusLength    = radiusLength;
         
         //Calculate the number of radians per degree C.
-        //Celsius ranges from -40 to 60 C(100 degree span).
+        //Celsius ranges from -40 to 60 C(100 degree C span).
         this.radsPerC = (6 * Math.PI / 4) / 100;
 
-        //Calcuulate the number of radians per degree F.
-        //Fahrenheit ranges from -40 to 140 F(180 degree C span).
+        //Calculate the number of radians per degree F.
+        //Fahrenheit ranges from -40 to 140 F(180 degree F span).
         this.radsPerF = (6 * Math.PI / 4) / 180;
 
         //Calculate degrees per minor tick in C(every 5 degrees C).
@@ -280,7 +280,7 @@ class ATemp
         }
     }
 
-    //Draw the hand on the dial.
+    //Draw the needle on the dial.
     drawTriangle(angle, color, base, height)
     {
         this.ctx.beginPath();
