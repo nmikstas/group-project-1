@@ -26,6 +26,10 @@ var modal = document.getElementById("myModal");
 var debug = true; //Print console stuff if debugging.
 var idNum = 0;    //Used to create unique IDs for weather station objects.
 
+//Temperature constants.
+const C = 0;
+const F = 1;
+
 /*********************************** Firebase Authentication Stuff ***********************************/
 //Capture login button clicks.
 $(document).ready(function()
@@ -96,7 +100,7 @@ firebase.auth().onAuthStateChanged(function(user)
         {
             if (!snapshot.hasChild(uid))
             {
-                if(debug)console.log("Creating ne user: " + uid);
+                if(debug)console.log("Creating new user: " + uid);
                 userRef.child(uid).set
                 ({
                     stations: "stations",
@@ -113,7 +117,7 @@ firebase.auth().onAuthStateChanged(function(user)
         var userEmail = user.email
         $(".navbar-text").text("Logged In User: " + userEmail);
 
-        // User is signed in.
+        //User is signed in.
         if(debug)console.log("Signed in");
         if(debug)console.log("User's email: " + userEmail);
         
@@ -124,7 +128,7 @@ firebase.auth().onAuthStateChanged(function(user)
 
     else
     {
-        // User is signed out.
+        //User is signed out.
         modal.style.display = "block";
         $("#email-input").val("");
         $("#password-input").val("");
@@ -340,9 +344,9 @@ function runPage()
         var country   = stationObj.country;
         var windSpeed = stationObj.weatherObj.wind.speed;
         var windDeg   = Math.round(stationObj.weatherObj.wind.deg);
-
-
-
+        var temp      = stationObj.weatherObj.main.temp;
+        var tempType  = F;
+        
 
 
 
@@ -441,7 +445,7 @@ function runPage()
         var clockID = "clock-canvas" + idNum;
         var clockCan = document.createElement("canvas");
         clockCan.id = clockID;
-        clockCan.width = 151;
+        clockCan.width  = 151;
         clockCan.height = 151;
     
         var dTime = $("<div>");
@@ -494,6 +498,42 @@ function runPage()
         //Create the wind vane object.
         var vane = new AWind(document.getElementById(vaneID));
         vane.draw(windDeg);
+
+        //------------------------ Temperature Stuff -------------------------
+        //Add a temperature div.
+        var tempDiv = $("<div>");
+        tempDiv.addClass("border temp-div station-div mr-1");
+        cardBody.append(tempDiv);
+
+        var tempF = $("<div>");
+        tempF.html("Fahrenheit: " + tempCalc(temp, F).toFixed(1) + "&#8457<br>");
+        tempF.attr("id", "temp-f" + idNum);
+        tempDiv.append(tempF);
+
+        var tempC = $("<div>");
+        tempC.html("Celsius: " + tempCalc(temp, C).toFixed(1) + "&#8451<br>");
+        tempC.attr("id", "temp-c" + idNum);
+        tempDiv.append(tempC);
+
+        var tempID  = "temp-canvas" + idNum;
+        var tempCan = document.createElement("canvas");
+        tempCan.id  = tempID;
+        tempCan.width  = 151;
+        tempCan.height = 151;
+        tempDiv.append(tempCan);
+
+        //Create the temperature dial object.
+        var thisTemp = new ATemp(document.getElementById(tempID));
+        thisTemp.draw(temp, tempType);
+        
+        //Create listener for the temperature canvas to toggle between C and F.
+        tempDiv.on("click", function()
+        {
+            tempType === F ? tempType = C : tempType = F;
+            thisTemp.draw(temp, tempType);
+        });
+
+
 
 
 
@@ -559,9 +599,11 @@ function runPage()
                         vaneDir.html("Wind Dir: " + windDeg + " Degrees");
                         vane.draw(windDeg);
 
-
-                    
-
+                        //Update the temperature.
+                        temp = response.main.temp;
+                        tempF.html("Fahrenheit: " + tempCalc(temp, F).toFixed(1) + "&#8457<br>");
+                        tempC.html("Celsius: " + tempCalc(temp, C).toFixed(1) + "&#8451<br>");
+                        thisTemp.draw(temp, tempType);
 
 
 
@@ -580,6 +622,12 @@ function runPage()
         //Always update idNum so everything can have a unique ID.
         idNum++;
     });
+
+    //Convert Kelvin to Celsius or Fahrenheit
+    function tempCalc(temperature, convType)
+    {
+        return convType === C ? temperature - 273.15 : temperature * 9/5 - 459.67;
+    }
 
     /************************ Add and Remove Quick Link to Webpage Function **************************/
     //Event listener that gets called whenever a quick link is added.
@@ -618,7 +666,7 @@ function runPage()
         //Create the remove button tooltip.
         var remTooltip = $("<div>");
         remTooltip.addClass("tooltiptext");
-        remTooltip.text("Remove From Quick Links");
+        remTooltip.text("Remove From Favorites");
 
         //Add remove tooltip to the remove div.
         remDiv.append(remTooltip);
