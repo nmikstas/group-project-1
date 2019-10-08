@@ -15,9 +15,10 @@
 
     <!--Personal Styling-->
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Big+Shoulders+Text&display=swap" rel="stylesheet">
 </head>
 
-<body class="d-flex flex-column" id="main-body">
+<body class="d-flex flex-column" id="main-body" style="font-family: Big Shoulders">
 
     <!-- Log-in Modal -->
     <div id="myModal" class="modal-background">
@@ -58,7 +59,7 @@
 
     <div class=row>
         <nav class="navbar navbar-dark container-fluid" style="color: white; background-color: rgba(52,58,64, 0.5)">
-            <a class="navbar-brand"> <img src="assets/images/small-umbrella-outline-icon.png" alt="umbrella">Weather
+            <a class="navbar-brand" style="font-size: 35px"> <img src="assets/images/small-umbrella-outline-icon.png" alt="umbrella">Weather
                 Station</a>
             <form class="search">
                 <div class="col-3"></div>
@@ -70,9 +71,9 @@
                     <input class="btn btn-secondary form-btn ml-3" id="weather-search" type="submit" value="Search">
                 </div>
             </form>
-            <div class="col-2">
+            <div class="col-2 text-center">
                 <span class="navbar-text text-center">Logged In User: None</span>
-                <button class="btn btn-secondary m-2" id="logout" type="submit">Log Out</button>
+                <button class="btn btn-secondary" id="logout" type="submit">Log Out</button>
             </div>
     </div>
     </nav>
