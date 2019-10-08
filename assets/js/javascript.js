@@ -26,6 +26,10 @@ var modal = document.getElementById("myModal");
 var debug = true; //Print console stuff if debugging.
 var idNum = 0;    //Used to create unique IDs for weather station objects.
 
+//Temperature constants.
+const C = 0;
+const F = 1;
+
 /*********************************** Firebase Authentication Stuff ***********************************/
 //Capture login button clicks.
 $(document).ready(function()
@@ -96,7 +100,7 @@ firebase.auth().onAuthStateChanged(function(user)
         {
             if (!snapshot.hasChild(uid))
             {
-                if(debug)console.log("Creating ne user: " + uid);
+                if(debug)console.log("Creating new user: " + uid);
                 userRef.child(uid).set
                 ({
                     stations: "stations",
@@ -113,7 +117,7 @@ firebase.auth().onAuthStateChanged(function(user)
         var userEmail = user.email
         $(".navbar-text").text("Logged In User: " + userEmail);
 
-        // User is signed in.
+        //User is signed in.
         if(debug)console.log("Signed in");
         if(debug)console.log("User's email: " + userEmail);
         
@@ -124,7 +128,7 @@ firebase.auth().onAuthStateChanged(function(user)
 
     else
     {
-        // User is signed out.
+        //User is signed out.
         modal.style.display = "block";
         $("#email-input").val("");
         $("#password-input").val("");
@@ -340,17 +344,16 @@ function runPage()
         var country   = stationObj.country;
         var windSpeed = stationObj.weatherObj.wind.speed;
         var windDeg   = Math.round(stationObj.weatherObj.wind.deg);
-
-
-
-
-
-
-
-
-
-    
-    
+        var temp      = stationObj.weatherObj.main.temp;
+        var tempType  = F;
+        var clouds    = stationObj.weatherObj.clouds.all;
+        var humidity  = stationObj.weatherObj.main.humidity;
+        var pressure  = stationObj.weatherObj.main.pressure;
+        var cntryCode = stationObj.weatherObj.sys.country;
+        var cityID    = stationObj.weatherObj.id;
+        var vis       = stationObj.weatherObj.visibility;
+        var curDesc   = stationObj.weatherObj.weather[0].description;
+        var curIcon   = stationObj.weatherObj.weather[0].icon;
 
         //------------------- Create Weather Station Card --------------------
         var card = $("<div>");
@@ -435,13 +438,13 @@ function runPage()
         //Add a clock div.
         var clockDiv = $("<div>");
         clockDiv.addClass("border clock-div station-div mr-1");
-        clockDiv.append("Local Time<br>");
+        clockDiv.append("<p>Local Time</p>");
         cardBody.append(clockDiv);
     
         var clockID = "clock-canvas" + idNum;
         var clockCan = document.createElement("canvas");
         clockCan.id = clockID;
-        clockCan.width = 151;
+        clockCan.width  = 151;
         clockCan.height = 151;
     
         var dTime = $("<div>");
@@ -458,7 +461,27 @@ function runPage()
         //Convert back to local time.
         var localTime = utcTime +(timeZone * 1000);
         clock.draw(moment(localTime));
-        dTime.text(moment(localTime).format("hh:mm:ss A"));
+        dTime.html("<p>" + moment(localTime).format("hh:mm:ss A") + "</p>");
+
+        //------------------------ Time Of Day Stuff -------------------------
+        //Add a time of day div.
+        var todDiv = $("<div>");
+        todDiv.addClass("border station-div tod-div mr-1");
+        cardBody.append(todDiv);
+        todDiv.append("<p>Time of Day:</p>");
+        var ttlDiv = $("<div>");
+        todDiv.append(ttlDiv);
+
+        todTime = moment(localTime).format("H");
+        setTOD(todTime, todDiv, ttlDiv);
+
+        //Do this to align things.
+        var todID  = "tod-canvas" + idNum;
+        var todCan = document.createElement("canvas");
+        todCan.id  = todID;
+        todCan.width  = 151;
+        todCan.height = 151;
+        todDiv.append(todCan);
 
         //------------------------- Wind Vane Stuff --------------------------
         //Need to check if wind direction and speed are defined.
@@ -475,12 +498,12 @@ function runPage()
         cardBody.append(vaneDiv);
 
         var vaneSpeed = $("<div>");
-        vaneSpeed.html("Wind Speed: " + windSpeed + " m/s<br>");
+        vaneSpeed.html("<p>Wind Speed: " + windSpeed + " m/s</p>");
         vaneSpeed.attr("id", "vane-speed" + idNum);
         vaneDiv.append(vaneSpeed);
 
         var vaneDir = $("<div>");
-        vaneDir.html("Wind Dir: " + windDeg + " Degrees");
+        vaneDir.html("<p>Wind Dir: " + windDeg + " Degrees</p>");
         vaneDir.attr("id", "vane-dir" + idNum);
         vaneDiv.append(vaneDir);
 
@@ -495,17 +518,169 @@ function runPage()
         var vane = new AWind(document.getElementById(vaneID));
         vane.draw(windDeg);
 
+        //----------------------- Cloud Coverage Stuff -----------------------
+        //Add a cloud coverage div.
+        var cloudDiv = $("<div>");
+        cloudDiv.addClass("border cloud-div station-div mr-1");
+        cardBody.append(cloudDiv);
+        var cltDiv = $("<div>");
+        cloudDiv.append(cltDiv);
+        var cldDiv = $("<div>");
+        cloudDiv.append(cldDiv);
 
+        setClouds(clouds, cloudDiv, cldDiv, cltDiv);
 
+        //Do this to align things.
+        var cloudID  = "cloud-canvas" + idNum;
+        var cloudCan = document.createElement("canvas");
+        cloudCan.id  = cloudID;
+        cloudCan.width  = 151;
+        cloudCan.height = 151;
+        cloudDiv.append(cloudCan);
 
+        //------------------------ Temperature Stuff -------------------------
+        //Add a temperature div.
+        var tempDiv = $("<div>");
+        tempDiv.addClass("border temp-div station-div mr-1");
+        cardBody.append(tempDiv);
 
+        var tempF = $("<div>");
+        tempF.html("<p>Fahrenheit: " + tempCalc(temp, F).toFixed(1) + "&#8457</p>");
+        tempF.attr("id", "temp-f" + idNum);
+        tempDiv.append(tempF);
 
+        var tempC = $("<div>");
+        tempC.html("<p>Celsius: " + tempCalc(temp, C).toFixed(1) + "&#8451</p>");
+        tempC.attr("id", "temp-c" + idNum);
+        tempDiv.append(tempC);
 
+        var tempID  = "temp-canvas" + idNum;
+        var tempCan = document.createElement("canvas");
+        tempCan.id  = tempID;
+        tempCan.width  = 151;
+        tempCan.height = 151;
+        tempDiv.append(tempCan);
 
+        //Create the temperature dial object.
+        var thisTemp = new ATemp(document.getElementById(tempID));
+        thisTemp.draw(temp, tempType);
+        
+        //Create listener for the temperature canvas to toggle between C and F.
+        tempDiv.on("click", function()
+        {
+            tempType === F ? tempType = C : tempType = F;
+            thisTemp.draw(temp, tempType);
+        });
 
+        //-------------------------- Humidity Stuff --------------------------
+        //Add a humidity div.
+        var humidityDiv = $("<div>");
+        humidityDiv.addClass("border humidity-div station-div mr-1");
+        cardBody.append(humidityDiv);
+        humidityDiv.append("<p>Humidity:</p>");
+        var humDiv = $("<div>");
+        humDiv.html("<p>" + humidity + "%</p>");
+        humidityDiv.append(humDiv);
 
+        var humidityID  = "humidity-canvas" + idNum;
+        var humidityCan = document.createElement("canvas");
+        humidityCan.id  = humidityID;
+        humidityCan.width  = 151;
+        humidityCan.height = 151;
+        humidityDiv.append(humidityCan);
 
+        //-------------------------- Pressure Stuff --------------------------
+        //Add a Pressure div.
+        var pressureDiv = $("<div>");
+        pressureDiv.addClass("border pressure-div station-div mr-1");
+        cardBody.append(pressureDiv);
+        pressureDiv.append("<p>Pressure:</p>");
+        presDiv = $("<div>");
+        presDiv.html("<p>" + pressure + "hPa</p>");
+        pressureDiv.append(presDiv);
 
+        var pressureID  = "pressure-canvas" + idNum;
+        var pressureCan = document.createElement("canvas");
+        pressureCan.id  = pressureID;
+        pressureCan.width  = 151;
+        pressureCan.height = 151;
+        pressureDiv.append(pressureCan);
+
+        //--------------------- Current Conditions Stuff ---------------------
+        //Add a Current Conditions div.
+        var currentDiv = $("<div>");
+        currentDiv.addClass("border current-div station-div mr-1");
+        cardBody.append(currentDiv);
+        currentDiv.append("<p>Current Conditions:</p>");
+        curDiv = $("<div>");
+        curDiv.html("<p>" + curDesc + "</p>");
+        currentDiv.append(curDiv);
+        currentDiv.css('background-image',
+            "url('https://openweathermap.org/img/wn/" + curIcon + "@2x.png')");
+
+        var currentID  = "current-canvas" + idNum;
+        var currentCan = document.createElement("canvas");
+        currentCan.id  = currentID;
+        currentCan.width  = 151;
+        currentCan.height = 151;
+        currentDiv.append(currentCan);
+
+        //------------------------- Visibility Stuff -------------------------
+        //Add a Visibility div.
+        var visibilityDiv = $("<div>");
+        visibilityDiv.addClass("border visibility-div station-div mr-1");
+        cardBody.append(visibilityDiv);
+        visibilityDiv.append("<p>Visibility:</p>");
+        visDiv = $("<div>");
+        visDiv.html("<p>" + vis + " meters</p>");
+        visibilityDiv.append(visDiv);
+
+        var visID  = "visibility-canvas" + idNum;
+        var visCan = document.createElement("canvas");
+        visCan.id  = visID;
+        visCan.width  = 151;
+        visCan.height = 151;
+        visibilityDiv.append(visCan);
+
+        //----------------------- Technical Info Stuff -----------------------
+        //Add a Technical Info div.
+        var infoDiv = $("<div>");
+        infoDiv.addClass("border info-div station-div mr-1");
+        cardBody.append(infoDiv);
+        infoDiv.append("<p>Location</p>");
+        infoDiv.append("<p>Information:</p>");
+        infoDiv.append("Country Code: " + cntryCode + "<br>");
+        infoDiv.append("City ID: " + cityID + "<br>");
+        infoDiv.append("Latitude: " + lat + "<br>");
+        infoDiv.append("Longitude: " + lon + "<br>");
+        infoDiv.append("Timezone Offset: " + timeZone + "<br>");
+
+        var infoID  = "temp-canvas" + idNum;
+        var infoCan = document.createElement("canvas");
+        infoCan.id  = infoID;
+        infoCan.width  = 151;
+        infoCan.height = 31;
+        infoDiv.append(infoCan);
+        
+        //------------------------ Next Refresh Stuff ------------------------
+        //Add a Next Refresh div.
+        var refreshDiv = $("<div>");
+        refreshDiv.addClass("border refresh-div station-div mr-1");
+        cardBody.append(refreshDiv);
+        refreshDiv.append("<p>Time Until</p>");
+        refreshDiv.append("<p>Next Refresh</p>");
+
+        //Do this to align things.
+        var refreshID  = "refresh-canvas" + idNum;
+        var refreshCan = document.createElement("canvas");
+        refreshCan.classList.add ("refresh-can");
+        refreshCan.id  = refreshID;
+        refreshCan.width  = 151;
+        refreshCan.height = 151;
+        refreshDiv.append(refreshCan);
+
+        var timer = new ATimer(refreshCan, refreshCan.width, 610, CLOCK_STYLE_1, "#666666", null);
+        timer.startTimer();
 
         //------------------------- Timing Intervals -------------------------
         //Animate the clock and current time underneath it.
@@ -518,13 +693,21 @@ function runPage()
             //Convert back to local time.
             var localTime = utcTime +(timeZone * 1000);
             clock.draw(moment(localTime));
-            dTime.text(moment(localTime).format("hh:mm:ss A"));
+            dTime.html("<p>" + moment(localTime).format("hh:mm:ss A") + "</p>");
+
+            //Update the time of day.
+            todTime = moment(localTime).format("H");
+            setTOD(todTime, todDiv, ttlDiv);
 
             //Here we check if the weather info needs to be updated.  The database only updates
             //once every 10 minutes so we will check every 10 minutes and 10 seconds.
             if(moment().diff(localTS) > 10 * 60 * 1000 + 10000)
             {
                 if(debug)console.log("Updating " + name);
+
+                //Reset the refresh timer.
+                timer.resetTimer();
+                timer.startTimer();
 
                 //Make sure we don't constantly update by changing the time stamp.
                 localTS = moment();
@@ -555,23 +738,38 @@ function runPage()
                         //Update the wind.
                         windSpeed = response.wind.speed;
                         windDeg   = Math.round(response.wind.deg);
-                        vaneSpeed.html("Wind Speed: " + windSpeed + " m/s<br>");
-                        vaneDir.html("Wind Dir: " + windDeg + " Degrees");
+                        vaneSpeed.html("<p>Wind Speed: " + windSpeed + " m/s</p>");
+                        vaneDir.html("<p>Wind Dir: " + windDeg + " Degrees<p>");
                         vane.draw(windDeg);
 
+                        //Update the temperature.
+                        temp = response.main.temp;
+                        tempF.html("<p>Fahrenheit: " + tempCalc(temp, F).toFixed(1) + "&#8457</p>");
+                        tempC.html("<p>Celsius: " + tempCalc(temp, C).toFixed(1) + "&#8451</p>");
+                        thisTemp.draw(temp, tempType);
 
-                    
+                        //Update cloud cover.
+                        clouds = response.clouds.all;
+                        setClouds(clouds, cloudDiv, cldDiv, cltDiv);
 
+                        //Update humidity.
+                        humidity = response.main.humidity;
+                        humDiv.html("<p>" + humidity + "%</p>");
 
+                        //Update pressure.
+                        pressure = response.main.pressure;
+                        presDiv.html("<p>" + pressure + "hPa</p>");
 
+                        //Update visibility.
+                        vis = response.visibility;
+                        visDiv.html("<p>" + vis + " meters</p>");
 
-
-
-
-
-
-
-
+                        //Update current conditions.
+                        curDesc = response.weather[0].description;
+                        curIcon = response.weather[0].icon;
+                        curDiv.html("<p>" + curDesc + "</p>");
+                        currentDiv.css('background-image',
+                            "url('https://openweathermap.org/img/wn/" + curIcon + "@2x.png')");
                     }
                 });
             }
@@ -580,6 +778,79 @@ function runPage()
         //Always update idNum so everything can have a unique ID.
         idNum++;
     });
+
+    //Convert Kelvin to Celsius or Fahrenheit
+    function tempCalc(temperature, convType)
+    {
+        return convType === C ? temperature - 273.15 : temperature * 9/5 - 459.67;
+    }
+
+    //Set the time of day image and text.
+    function setTOD(todTime, todDiv, ttlDiv)
+    {
+        if(todTime <= 2)
+        {
+            todDiv.css('background-image', "url('assets/images/night.png')"); 
+            ttlDiv.html("<p>Night</p>");
+        }
+        else if(todTime <= 6)
+        {
+            todDiv.css('background-image', "url('assets/images/earlyMorning.png')");
+            ttlDiv.html("<p>Early Morning</p>");
+        }
+        else if(todTime <= 10)
+        {
+            todDiv.css('background-image', "url('assets/images/morning.png')");
+            ttlDiv.html("<p>Morning</p>");
+        }
+        else if(todTime <= 14)
+        {
+            todDiv.css('background-image', "url('assets/images/midday.png')");
+            ttlDiv.html("<p>Midday</p>");
+        }
+        else if(todTime <= 18)
+        {
+            todDiv.css('background-image', "url('assets/images/afternoon.png')");
+            ttlDiv.html("<p>Afternoon</p>");
+        }
+        else if(todTime <= 22)
+        {
+            todDiv.css('background-image', "url('assets/images/evening.png')");
+            ttlDiv.html("<p>Evening</p>");
+        }
+        else
+        {
+            todDiv.css('background-image', "url('assets/images/night.png')");
+            ttlDiv.html("<p>Night</p>");
+        }
+    }
+
+    //Set the cloud cover image and text.
+    function setClouds(clouds, cloudDiv, cldDiv, cltDiv)
+    {
+        cltDiv.html("<p>Cloud Coverage: " + clouds + "%</p>");
+        
+        if(clouds <= 25)
+        {
+            cloudDiv.css('background-image', "url('assets/images/clearSky.jpg')");
+            cldDiv.html("<p>Clear Skies</p>");
+        }
+        else if(clouds <= 50)
+        {
+            cloudDiv.css('background-image', "url('assets/images/lightClouds.jpg')");
+            cldDiv.html("<p>Light Clouds</p>");
+        }
+        else if(clouds <= 75)
+        {
+            cloudDiv.css('background-image', "url('assets/images/heavyClouds.jpg')");
+            cldDiv.html("<p>Mostly Cloudy</p>");
+        }
+        else
+        {
+            cloudDiv.css('background-image', "url('assets/images/overcast.jpg')");
+            cldDiv.html("<p>Overcast</p>");
+        }
+    }
 
     /************************ Add and Remove Quick Link to Webpage Function **************************/
     //Event listener that gets called whenever a quick link is added.
@@ -618,7 +889,7 @@ function runPage()
         //Create the remove button tooltip.
         var remTooltip = $("<div>");
         remTooltip.addClass("tooltiptext");
-        remTooltip.text("Remove From Quick Links");
+        remTooltip.text("Remove From Favorites");
 
         //Add remove tooltip to the remove div.
         remDiv.append(remTooltip);

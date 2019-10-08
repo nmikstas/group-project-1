@@ -20,14 +20,16 @@
 
 <body class="d-flex flex-column" id="main-body" style="font-family: Big Shoulders">
 
-    <!-- Log-in Modal -->
+    <!--Log-in Modal-->
     <div id="myModal" class="modal-background">
         <div class="modal-content container">
 
             <div class="card card-default">
+
                 <div class="card-header">
                     <h1>Welcome to the Weather Station!</h1>
                 </div>
+
                 <div class="card-body">
                     <form>
                         <div class="form-group row">
@@ -52,11 +54,13 @@
                         </div>
                     </form>
                 </div>
+
             </div>
 
         </div>
     </div>
 
+<<<<<<< HEAD
     <div class=row>
         <nav class="navbar navbar-dark container-fluid" style="color: white; background-color: rgba(52,58,64, 0.5)">
             <a class="navbar-brand" style="font-size: 35px"> <img src="assets/images/small-umbrella-outline-icon.png" alt="umbrella">Weather
@@ -74,20 +78,42 @@
             <div class="col-2 text-center">
                 <span class="navbar-text text-center">Logged In User: None</span>
                 <button class="btn btn-secondary" id="logout" type="submit">Log Out</button>
+=======
+    <!--Header-->
+    <div id="header-body">
+        <nav class="navbar navbar-dark container-fluid row" style="color: white; background-color: rgba(52,58,64, 0.5)">
+            
+            <div class="col-md-2 text-center">
+                <img src="assets/images/small-umbrella-outline-icon.png" alt="umbrella">
+                <h4>Weather Station</h4>
             </div>
+            
+            <div class="col-md-8 p-4 text-left">
+                <form class="search">
+                    <div class="form-group px-4">
+                        <label for="weather-input">
+                            Search by <b>City, Country</b> -OR- by <b>5 Digit ZIP Code</b>
+                        </label>
+                        <input class="form-control form-input" id="weather-input"
+                            placeholder="Type Your Favorite Destination and Press ENTER" type="text">
+                        <input class="btn btn-secondary form-btn" id="weather-search" type="submit" value="Search">
+                    </div>
+                </form>
+            </div>
+            
+            <div class="col-md-2 text-center">
+                <div class="navbar-text">Logged In User: None</div>
+                <br>
+                <button class="btn btn-secondary m-2" id="logout" type="submit">Log Out</button>
+>>>>>>> 02a919e79bb5c7b3e2061f80c2ab5829712be27f
+            </div>
+           
+        </nav>
     </div>
-    </nav>
-
-
+    
     <!--Main content body-->
     <div id="page-body">
         <div class="container-fluid px-4 py-4 my-4" style="background-color: rgba(52,58,64, 0.5)">
-
-            <div class="row">
-                <div class="col-md-12">
-
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col-md-9">
@@ -104,6 +130,7 @@
         </div>
     </div>
 
+    <!--Footer-->
     <footer id="sticky-footer" class="pt-4 pb-1">
         <div class="container text-center">
             <small> Copyright &copy; Nick Mikstas, Tyler Webb, Chris Laughter and Elijah Lanza - Group Project 1</small>
@@ -126,8 +153,10 @@
         async defer></script>
 
     <!--Javascript-->
+    <script src="assets/js/atimer.js"></script>
     <script src="assets/js/aclock.js"></script>
     <script src="assets/js/awind.js"></script>
+    <script src="assets/js/atemp.js"></script>
     <script src="assets/js/javascript.js"></script>
 </body>
 

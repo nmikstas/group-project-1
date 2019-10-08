@@ -26,10 +26,11 @@ class AClock
         outerRingColor  = "#000000", centerColor    = "#000000",
         minuteTickColor = "#8f8f8f", minorTickColor = "#8f8f8f", majorTickColor = "#8f8f8f",
 
-        //These variables control the thickness in pixels of the various clock components.
-        secondWidth     = 2, minuteWidth    = 4, hourWidth      = 6,
-        outerRingWidth  = 3, centerWidth    = 5,
-        minuteTickWidth = 1, minorTickWidth = 2, majorTickWidth = 3,
+        //These variables control the line widths of the wind vane components. and are percentages
+        //of the drawing radius.
+        secondWidth     = .03, minuteWidth    = .05, hourWidth      = .07,
+        outerRingWidth  = .04, centerWidth    = .03,
+        minuteTickWidth = .01, minorTickWidth = .02, majorTickWidth = .04,
 
         //These variables control the lengths and radiuses of the clock components.
         //radiusLen scales the entire clock and is the percentage of the canvas that is used
@@ -40,7 +41,7 @@ class AClock
         //the ticks is 1 - the given value.  For example, if minuteTickLen is .90, then the total
         //length of the tick is 1 - .90 = .1. The minute ticks will be 10% of the clock radius.
         secondLen     = .90, minuteLen    = .75, hourLen      = .60,
-        radiusLen     = .95, centerRad    = 2  ,
+        radiusLen     = .95,
         minuteTickLen = .90, minorTickLen = .85, majorTickLen = .80
     )
     {
@@ -74,7 +75,6 @@ class AClock
         this.minuteLen       = minuteLen;
         this.hourLen         = hourLen;
         this.radiusLen       = radiusLen;
-        this.centerRad       = centerRad;
         this.minuteTickLen   = minuteTickLen;
         this.minorTickLen    = minorTickLen;
         this.majorTickLen    = majorTickLen;
@@ -130,8 +130,9 @@ class AClock
             //Draw the minute ticks.
             for(let i = 0; i < 60; i++)
             {
-                this.drawLineAngle(thisTheta, this.minuteTickColor, this.minuteTickWidth, 
-                                   this.radius * this.minuteTickLen, this.radius);
+                this.drawLineAngle(thisTheta, this.minuteTickColor, 
+                    this.radius * this.minuteTickWidth, this.radius * this.minuteTickLen,
+                    this.radius);
                 thisTheta += Math.PI / 30;
             }
         }
@@ -145,8 +146,9 @@ class AClock
             //Draw the minor hour ticks.
             for(let i = 0; i < 12; i++)
             {
-                this.drawLineAngle(thisTheta, this.minorTickColor, this.minorTickWidth, 
-                                   this.radius * this.minorTickLen, this.radius);
+                this.drawLineAngle(thisTheta, this.minorTickColor,
+                    this.radius * this.minorTickWidth, this.radius * this.minorTickLen,
+                    this.radius);
                 thisTheta += Math.PI / 6;
             }
         }
@@ -160,8 +162,9 @@ class AClock
             //Draw the major hour ticks.
             for(let i = 0; i < 4; i++)
             {
-                this.drawLineAngle(thisTheta, this.majorTickColor, this.majorTickWidth,
-                                   this.radius * this.majorTickLen, this.radius);
+                this.drawLineAngle(thisTheta, this.majorTickColor,
+                    this.radius * this.majorTickWidth, this.radius * this.majorTickLen,
+                    this.radius);
                 thisTheta += Math.PI / 2;
             }
         }
@@ -170,7 +173,8 @@ class AClock
         if(!(this.options & HIDE_RING))
         {
             //Draw the circle of the clock face.
-            this.drawArc(0, 2 * Math.PI, this.radius, this.outerRingColor, this.outerRingWidth);
+            this.drawArc(0, 2 * Math.PI, this.radius, this.outerRingColor,
+                this.radius * this.outerRingWidth);
         }
 
         //Check if hour hand is enabled
@@ -183,7 +187,7 @@ class AClock
             thisTheta = -Math.PI / 2  + this.oneDegree * thisPiece;
 
             //Draw the hour hand.
-            this.drawLineAngle(thisTheta, this.hourColor, this.hourWidth,
+            this.drawLineAngle(thisTheta, this.hourColor, this.radius * this.hourWidth,
                                0, this.radius * this.hourLen);
         }
 
@@ -197,7 +201,7 @@ class AClock
             thisTheta = -Math.PI / 2  + this.oneDegree * thisPiece;
 
             //Draw the minute hand.
-            this.drawLineAngle(thisTheta, this.minuteColor, this.minuteWidth,
+            this.drawLineAngle(thisTheta, this.minuteColor, this.radius * this.minuteWidth,
                                0, this.radius * this.minuteLen);
         }
 
@@ -217,7 +221,7 @@ class AClock
             var thisTheta = -Math.PI / 2 + this.oneDegree * thisPiece;
 
             //Draw the second hand.
-            this.drawLineAngle(thisTheta, this.secondColor, this.secondWidth,
+            this.drawLineAngle(thisTheta, this.secondColor, this.radius * this.secondWidth,
                                0, this.radius * this.secondLen);
         }
 
@@ -225,7 +229,8 @@ class AClock
         if(!(this.options & HIDE_CENTER))
         {
             //Draw the inner circle the hands attach to.
-            this.drawArc(0, 2 * Math.PI, this.centerRad, this.centerColor, this.centerWidth);
+            this.drawArc(0, 2 * Math.PI, this.radius * this.centerWidth, this.centerColor,
+                this.radius * this.centerWidth * 2);
         }
     }
 

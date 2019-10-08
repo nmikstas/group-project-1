@@ -35,6 +35,16 @@ h3
     display: inline-block;
 }
 
+h4
+{
+    font-family: sans-serif;
+    font-size: 20px;
+    
+    color: #ffffff;
+    display: inline-block;
+    text-align: center;
+}
+
 th
 {
     font-weight: bold;
@@ -66,7 +76,6 @@ footer
 {
     background-color: rgba(52, 58, 64, .5);
     color: #ffffff;
-    /* border-top: 8px solid #4aaaa5; */
 }
 
 /************************************ Project Specific Stuff *************************************/
@@ -119,24 +128,6 @@ footer
 {
     width: 10%;
     display: none;
-}
-
-.station-div
-{
-    display: inline-block;
-    text-align: center;
-    width: 200px;
-    height: 200px;
-}
-
-.clock-div
-{
-    background-color: rgb(222, 238, 223);
-}
-
-.vane-div
-{
-    background-color: rgb(243, 226, 226);
 }
 
 .header-btn
@@ -215,4 +206,94 @@ footer
 .header-right
 {
     float: right;
+}
+
+.navbar
+{
+    width: 100%;
+    margin: 0;
+}
+
+.station-div
+{
+    display: inline-block;
+    text-align: center;
+    width: 200px;
+    height: 200px;
+}
+
+.clock-div
+{
+    background-color: rgb(222, 224, 238);
+}
+
+.tod-div
+{
+    background-size: 100% 100%;
+}
+
+.vane-div
+{
+    background-color: rgb(243, 232, 226);
+}
+
+.temp-div
+{
+    background-color: rgb(227, 243, 226);
+}
+
+.cloud-div
+{
+    background-color: rgb(234, 243, 226);
+    background-size: 100% 100%;
+}
+
+.humidity-div
+{
+    background-color: rgb(226, 243, 242);
+    background-size: 100% 100%;
+    background-image: url("../images/humidity.png");
+}
+
+.pressure-div
+{
+    background-color: rgb(226, 230, 243);
+    background-size: 100% 100%;
+    background-image: url("../images/baro.png");
+}
+
+.current-div
+{
+    background-color: rgb(226, 202, 241);
+    background-size: 100% 100%;
+}
+
+.visibility-div
+{
+    background-color: rgb(236, 226, 243);
+    background-size: 100% 100%;
+    background-image: url("../images/visibility.png");
+}
+
+.info-div
+{
+    background-color: rgb(205, 207, 231);
+}
+
+.refresh-div
+{
+    background-color: rgb(236, 233, 233);
+}
+
+.refresh-can
+{
+    opacity: .7;
+}
+
+p
+{
+    background-color: black;
+    opacity: .5;
+    color: white;
+    margin-bottom: 0;
 }
