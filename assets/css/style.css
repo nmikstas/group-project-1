@@ -224,7 +224,7 @@ footer
 
 .clock-div
 {
-    background-color: rgb(238, 222, 222);
+    background-color: rgb(222, 224, 238);
 }
 
 .tod-div
@@ -239,7 +239,7 @@ footer
 
 .temp-div
 {
-    background-color: rgb(243, 243, 226);
+    background-color: rgb(227, 243, 226);
 }
 
 .cloud-div
@@ -275,7 +275,12 @@ footer
 
 .refresh-div
 {
-    background-color: rgb(243, 226, 226);
+    background-color: rgb(236, 233, 233);
+}
+
+.refresh-can
+{
+    opacity: .7;
 }
 
 p
