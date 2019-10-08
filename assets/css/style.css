@@ -251,26 +251,33 @@ footer
 .humidity-div
 {
     background-color: rgb(226, 243, 242);
+    background-size: 100% 100%;
+    background-image: url("../images/humidity.png");
 }
 
 .pressure-div
 {
     background-color: rgb(226, 230, 243);
+    background-size: 100% 100%;
+    background-image: url("../images/baro.png");
 }
 
 .current-div
 {
-    background-color: rgb(231, 226, 243);
+    background-color: rgb(226, 202, 241);
+    background-size: 100% 100%;
 }
 
 .visibility-div
 {
     background-color: rgb(236, 226, 243);
+    background-size: 100% 100%;
+    background-image: url("../images/visibility.png");
 }
 
 .info-div
 {
-    background-color: rgb(243, 226, 236);
+    background-color: rgb(205, 207, 231);
 }
 
 .refresh-div
