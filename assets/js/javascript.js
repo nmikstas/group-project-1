@@ -616,7 +616,7 @@ function runPage()
         curDiv.html("<p>" + curDesc + "</p>");
         currentDiv.append(curDiv);
         currentDiv.css('background-image',
-            "url('http://openweathermap.org/img/wn/" + curIcon + "@2x.png')");
+            "url('https://openweathermap.org/img/wn/" + curIcon + "@2x.png')");
 
         var currentID  = "current-canvas" + idNum;
         var currentCan = document.createElement("canvas");
@@ -769,7 +769,7 @@ function runPage()
                         curIcon = response.weather[0].icon;
                         curDiv.html("<p>" + curDesc + "</p>");
                         currentDiv.css('background-image',
-                            "url('http://openweathermap.org/img/wn/" + curIcon + "@2x.png')");
+                            "url('https://openweathermap.org/img/wn/" + curIcon + "@2x.png')");
                     }
                 });
             }
