@@ -639,11 +639,21 @@ function runPage()
         //Add a Next Refresh div.
         var refreshDiv = $("<div>");
         refreshDiv.addClass("border refresh-div station-div mr-1");
-        //cardBody.append(refreshDiv);
+        cardBody.append(refreshDiv);
+        refreshDiv.append("Time Until<br>");
         refreshDiv.append("Next Refresh");
 
+        //Do this to align things.
+        var refreshID  = "refresh-canvas" + idNum;
+        var refreshCan = document.createElement("canvas");
+        refreshCan.classList.add ("refresh-can");
+        refreshCan.id  = refreshID;
+        refreshCan.width  = 151;
+        refreshCan.height = 151;
+        refreshDiv.append(refreshCan);
 
-
+        var timer = new ATimer(refreshCan, refreshCan.width, 610, CLOCK_STYLE_1, "#666666", null);
+        timer.startTimer();
 
         //------------------------- Timing Intervals -------------------------
         //Animate the clock and current time underneath it.
@@ -667,6 +677,10 @@ function runPage()
             if(moment().diff(localTS) > 10 * 60 * 1000 + 10000)
             {
                 if(debug)console.log("Updating " + name);
+
+                //Reset the refresh timer.
+                timer.resetTimer();
+                timer.startTimer();
 
                 //Make sure we don't constantly update by changing the time stamp.
                 localTS = moment();
@@ -724,6 +738,10 @@ function runPage()
 
 
 
+
+
+
+
                     }
                 });
             }
@@ -742,29 +760,39 @@ function runPage()
     //Set the time of day image and text.
     function setTOD(todTime, todDiv, ttlDiv)
     {
-        if(todTime <= 5)
+        if(todTime <= 2)
         {
-            todDiv.css('background-image', "url('assets/images/night.jpg')"); 
+            todDiv.css('background-image', "url('assets/images/night.png')"); 
             ttlDiv.html("<p>Night</p>");
         }
-        else if(todTime <= 11)
+        else if(todTime <= 6)
         {
-            todDiv.css('background-image', "url('assets/images/morning.jpg')");
+            todDiv.css('background-image', "url('assets/images/earlyMorning.png')");
+            ttlDiv.html("<p>Early Morning</p>");
+        }
+        else if(todTime <= 10)
+        {
+            todDiv.css('background-image', "url('assets/images/morning.png')");
             ttlDiv.html("<p>Morning</p>");
         }
-        else if(todTime <= 17)
+        else if(todTime <= 14)
         {
-            todDiv.css('background-image', "url('assets/images/midday.jpg')");
+            todDiv.css('background-image', "url('assets/images/midday.png')");
             ttlDiv.html("<p>Midday</p>");
+        }
+        else if(todTime <= 18)
+        {
+            todDiv.css('background-image', "url('assets/images/afternoon.png')");
+            ttlDiv.html("<p>Afternoon</p>");
         }
         else if(todTime <= 22)
         {
-            todDiv.css('background-image', "url('assets/images/evening.jpg')");
+            todDiv.css('background-image', "url('assets/images/evening.png')");
             ttlDiv.html("<p>Evening</p>");
         }
         else
         {
-            todDiv.css('background-image', "url('assets/images/night.jpg')");
+            todDiv.css('background-image', "url('assets/images/night.png')");
             ttlDiv.html("<p>Night</p>");
         }
     }
