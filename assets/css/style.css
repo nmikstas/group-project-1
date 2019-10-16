@@ -1,9 +1,10 @@
 /***************************************** General Stuff *****************************************/
-
 body, html
 {
     height: 100%;
-    background-image: url("../images/mosaic.png")
+    background-image: url("../images/noisy_net.png");
+    overflow-x: hidden;
+    font-size: 16px;
 }
 
 h1
@@ -11,9 +12,9 @@ h1
     font-family: sans-serif;
     font-size: 50px;
     font-weight: bold;
-    color: #000000;
+    color: #ffffff;
     text-align: center;
-    padding: 30px;
+    width: 100%;
 }
 
 h2
@@ -50,17 +51,6 @@ th
     font-weight: bold;
 }
 
-.header-class
-{
-    font-family: Georgia, Times, serif;
-    text-align: center;
-    background-color: #4aaaa5;
-    color: #ffffff;
-    font-size: 30px;
-    border-bottom: 3px solid #666666;
-    padding: 20px 0px;
-}
-
 #canvas-div
 {
     width: 100%;
@@ -68,23 +58,73 @@ th
 
 #page-body
 {
-    background-image: url("../images/mosaic.png");
     flex: 1 0 auto;
 }
 
+.center-div
+{
+    position: relative;
+    flex: 1 0 auto;
+}
+
+/******************************************** Header *********************************************/
+.header-class
+{
+    font-family: Georgia, Times, serif;
+    text-align: center;
+    background-color: rgba(30, 47, 126, 0.3);
+    color: #ffffff;
+    font-size: 30px;
+    border-bottom: 3px solid #666666;
+    padding: 20px 0px;
+}
+
+.nav-link
+{
+    font-family:  sans-serif;
+    font-size:    20px;
+}
+
+.nav-title
+{
+    height: 100%;
+    font-family: sans-serif;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+.nav-title:hover,
+.nav-link:hover
+{
+    background-color:  rgba(30, 47, 126, 1);
+    border-radius: 5px;
+}
+
+/******************************************** Footer *********************************************/
 footer
 {
-    background-color: rgba(52, 58, 64, .5);
+    border-top: 1px solid #666666;
+    background-color: rgba(30, 47, 126, 0.3);
     color: #ffffff;
 }
 
 /************************************ Project Specific Stuff *************************************/
+.welcome
+
+{
+    font-family: sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+    color: #000000;
+    text-align: center;
+    padding: 30px;
+}
 
 .modal-background
 {
     background-color: rgba(0, 0, 0, .8);
     display: block;
-    position: fixed;
+    position: absolute;
     z-index: 1;
     padding-top: 100px;
     left: 0;
@@ -102,11 +142,13 @@ footer
     width: 80%;
 }
 
-#myModal {
+#myModal
+{
     overflow: auto;
 }
 
-#instructions {
+#instructions
+{
     font-size: 14.5px;
     text-align: center;
 }
