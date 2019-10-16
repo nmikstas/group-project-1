@@ -1,16 +1,20 @@
 /************************************ Analog emperature Class ************************************/
-//Options bit flags.
-const HIDE_RING3       = 0x01; //Set = hide outer clock ring.
-const HIDE_TEXT        = 0x02; //Set = hide "C" or "F" indicator.
-const HIDE_NUMBERS     = 0x04; //Set = hide numbers.
-const HIDE_FREEZE_TICK = 0x08; //Set = hide the freeze tick.
-const HIDE_MAJOR_TICK3 = 0x10; //Set = hide major ticks.
-const HIDE_MINOR_TICK3 = 0x20; //Set = hide minor ticks.
-const HIDE_CENTER3     = 0x40; //Set = hide center circle.
-const HIDE_NEEDLE      = 0x80; //Set = hide needle.
-
 class ATemp
 {
+    //Options bit flags.
+    static get HIDE_RING()       {return 0x01} //Set = hide outer clock ring.
+    static get HIDE_TEXT()       {return 0x02} //Set = hide "C" or "F" indicator.
+    static get HIDE_NUMBERS()    {return 0x04} //Set = hide numbers.
+    static get HIDE_FREEZE_TICK(){return 0x08} //Set = hide the freeze tick.
+    static get HIDE_MAJOR_TICK() {return 0x10} //Set = hide major ticks.
+    static get HIDE_MINOR_TICK() {return 0x20} //Set = hide minor ticks.
+    static get HIDE_CENTER()     {return 0x40} //Set = hide center circle.
+    static get HIDE_NEEDLE()     {return 0x80} //Set = hide needle.
+
+    //Temperature type constants.
+    static get C(){return 0} //Celsius.
+    static get F(){return 1} //Farhenheit.
+
     constructor
     (
         //canvas in the only required parameter in the constructor.  It is the reference to the
@@ -105,10 +109,6 @@ class ATemp
     //convType is either C(for Celsius) or F(for Fahrenheit).
     draw(temperature, convType)
     {
-        //Conversion type constants.
-        this.C = 0;
-        this.F = 1;
-
         //Get canvas height and width.
         this.canvasWidth  = this.canvas.clientWidth;
         this.canvasHeight = this.canvas.clientHeight;
@@ -129,7 +129,7 @@ class ATemp
         temperature = this.tempCalc(temperature, convType);
 
         //Set the critical points for drawing F or C.
-        if(convType === this.F)
+        if(convType === ATemp.F)
         {
             this.minorTicks = 19;
             this.majorTicks = 10;
@@ -155,7 +155,7 @@ class ATemp
         }
 
         //Check if the minor ticks are enabled.
-        if(!(this.options & HIDE_MINOR_TICK3))
+        if(!(this.options & ATemp.HIDE_MINOR_TICK))
         {
             //Prepare to draw minor ticks.
             this.thisTheta = -5 * Math.PI / 4;
@@ -171,7 +171,7 @@ class ATemp
         }
 
         //Check if the major ticks are enabled.
-        if(!(this.options & HIDE_MAJOR_TICK3))
+        if(!(this.options & ATemp.HIDE_MAJOR_TICK))
         {
             //Prepare to draw major ticks.
             this.thisTheta = -5 * Math.PI / 4;
@@ -187,7 +187,7 @@ class ATemp
         }
 
         //Check if the freeze tick is enabled.
-        if(!(this.options & HIDE_FREEZE_TICK))
+        if(!(this.options & ATemp.HIDE_FREEZE_TICK))
         {
             //Prepare to draw freezing point tick.
             this.thisTheta = (-5 * Math.PI / 4) + this.radToFreeze;
@@ -199,7 +199,7 @@ class ATemp
         }
 
         //Check if the numbers are enabled.
-        if(!(this.options & HIDE_NUMBERS))
+        if(!(this.options & ATemp.HIDE_NUMBERS))
         {
             //prepare to draw the numbers.
             this.thisTheta = (-5 * Math.PI / 4);
@@ -228,7 +228,7 @@ class ATemp
         }
 
         //Check if the needle is enabled.
-        if(!(this.options & HIDE_NEEDLE))
+        if(!(this.options & ATemp.HIDE_NEEDLE))
         {
             //Clamp the minimum and maximum values of the temperature.
             if(temperature < -40)
@@ -253,7 +253,7 @@ class ATemp
         }
 
         //Check if the center is enabled.
-        if(!(this.options & HIDE_CENTER3))
+        if(!(this.options & ATemp.HIDE_CENTER))
         {
             //Draw the center circle of the dial.
             this.drawArc(0, 2 * Math.PI, this.radius * this.centerWidth, this.centerColor,
@@ -261,7 +261,7 @@ class ATemp
         }
 
         //Check if the text is enabled.
-        if(!(this.options & HIDE_TEXT))
+        if(!(this.options & ATemp.HIDE_TEXT))
         {
             //Draw F or C.
             var textSize = this.radius * this.textRatio;
@@ -272,7 +272,7 @@ class ATemp
         }
 
         //Check if the outer ring is enabled.
-        if(!(this.options & HIDE_RING3))
+        if(!(this.options & ATemp.HIDE_RING))
         {
             //Draw semi-circle around dial.
             this.drawArc(-5 * Math.PI / 4,  Math.PI / 4, this.radius, this.ringColor,
@@ -332,7 +332,6 @@ class ATemp
     //Convert Kelvin to Celsius or Fahrenheit
     tempCalc(temperature, convType)
     {
-        const C = 0;
-        return convType === C ? temperature - 273.15 : temperature * 9/5 - 459.67;
+        return convType === ATemp.C ? temperature - 273.15 : temperature * 9/5 - 459.67;
     }
 }

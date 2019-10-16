@@ -1,20 +1,20 @@
 /************************************** Analog Clock Class ***************************************/
-//Options bit flags.
-const SUBSECONDS       = 0x001; //Set = second hand moves every 1/6th of a second.
-const HIDE_RING        = 0x002; //Set = hide outer clock ring.
-const HIDE_CENTER      = 0x004; //Set = hide center circle.
-const HIDE_SECONDS     = 0x008; //Set = hide second hand.
-const HIDE_MINUTES     = 0x010; //Set = hide minute hand.
-const HIDE_HOURS       = 0x020; //Set = hide hour hand.
-const HIDE_MINUTE_TICK = 0x040; //Set = hide minute ticks.
-const HIDE_MINOR_TICK  = 0x080; //Set = hide minor hour ticks.
-const HIDE_MAJOR_TICK  = 0x100; //Set = hide major hour ticks.
-
 //NOTE: If subseconds is active and AClock is being used to animate a clock, the timer interval
 //for the animation shoud be 80 milliseconds to ensure a proper sweeping motion of the second
 //hand.  If subseconds is disabled, 490 milliseconds should be used.
 class AClock
 {
+    //Options bit flags.
+    static get SUBSECONDS()      {return 0x001} //Set = second hand moves every 1/6th of a second.
+    static get HIDE_RING()       {return 0x002} //Set = hide outer clock ring.
+    static get HIDE_CENTER()     {return 0x004} //Set = hide center circle.
+    static get HIDE_SECONDS()    {return 0x008} //Set = hide second hand.
+    static get HIDE_MINUTES()    {return 0x010} //Set = hide minute hand.
+    static get HIDE_HOURS()      {return 0x020} //Set = hide hour hand.
+    static get HIDE_MINUTE_TICK(){return 0x040} //Set = hide minute ticks.
+    static get HIDE_MINOR_TICK() {return 0x080} //Set = hide minor hour ticks.
+    static get HIDE_MAJOR_TICK() {return 0x100} //Set = hide major hour ticks.
+
     constructor
     (
         //canvas in the only required parameter in the constructor.  It is the reference to the
@@ -122,7 +122,7 @@ class AClock
         if(hour === 12) hour = 0;
 
         //Check if minute ticks are enabled.
-        if(!(this.options & HIDE_MINUTE_TICK))
+        if(!(this.options & AClock.HIDE_MINUTE_TICK))
         {
             //Prepare to draw 60 minute ticks.
             thisTheta = 0;
@@ -138,7 +138,7 @@ class AClock
         }
 
         //Check if minor hour ticks are enabled.
-        if(!(this.options & HIDE_MINOR_TICK))
+        if(!(this.options & AClock.HIDE_MINOR_TICK))
         {
             //Prepare to draw 12 hour ticks.
             thisTheta = 0;
@@ -154,7 +154,7 @@ class AClock
         }
 
         //Check if major hour ticks are enabled.
-        if(!(this.options & HIDE_MAJOR_TICK))
+        if(!(this.options & AClock.HIDE_MAJOR_TICK))
         {
             //Prepare to draw 4 hour ticks at 3, 6, 9 and 12.
             thisTheta = 0;
@@ -170,7 +170,7 @@ class AClock
         }
 
         //Check if the outer ring is enabled.
-        if(!(this.options & HIDE_RING))
+        if(!(this.options & AClock.HIDE_RING))
         {
             //Draw the circle of the clock face.
             this.drawArc(0, 2 * Math.PI, this.radius, this.outerRingColor,
@@ -178,7 +178,7 @@ class AClock
         }
 
         //Check if hour hand is enabled
-        if(!(this.options & HIDE_HOURS))
+        if(!(this.options & AClock.HIDE_HOURS))
         {
             //Calculate the current piece the hour hand is on.
             thisPiece = Math.round(hour * 30 + min / 2);
@@ -192,7 +192,7 @@ class AClock
         }
 
         //Check if minute hand is enabled
-        if(!(this.options & HIDE_MINUTES))
+        if(!(this.options &AClock. HIDE_MINUTES))
         {
             //Calculate the current piece the minute hand is on.
             thisPiece = Math.round(min * 6 + sec / 10);
@@ -206,13 +206,13 @@ class AClock
         }
 
         //Check if second hand is enabled.
-        if(!(this.options & HIDE_SECONDS))
+        if(!(this.options & AClock.HIDE_SECONDS))
         {
             //Calculate the current piece the second hand is on.
             var thisPiece = sec * 6;
 
             //Check if subseconds are enabled.
-            if(this.options & SUBSECONDS)
+            if(this.options & AClock.SUBSECONDS)
             {
                 thisPiece += Math.round(mil * this.secondConst);
             }
@@ -226,7 +226,7 @@ class AClock
         }
 
         //Check if the center is enabled.
-        if(!(this.options & HIDE_CENTER))
+        if(!(this.options & AClock.HIDE_CENTER))
         {
             //Draw the inner circle the hands attach to.
             this.drawArc(0, 2 * Math.PI, this.radius * this.centerWidth, this.centerColor,

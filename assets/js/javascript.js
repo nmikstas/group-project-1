@@ -17,18 +17,14 @@ var firebaseConfig =
   
 firebase.initializeApp(firebaseConfig); // Initialize Firebase
 var database = firebase.database();     // Create a variable to reference the database.
-var uid;      //User ID.
-var userEmal; //Current user's email address.
+var uid;                                //User ID.
+var userEmal;                           //Current user's email address.
 
 //Reference to login modal.
 var modal = document.getElementById("myModal");
 
 var debug = true; //Print console stuff if debugging.
 var idNum = 0;    //Used to create unique IDs for weather station objects.
-
-//Temperature constants.
-const C = 0;
-const F = 1;
 
 /*********************************** Firebase Authentication Stuff ***********************************/
 //Capture login button clicks.
@@ -349,7 +345,7 @@ function runPage()
         var windSpeed = stationObj.weatherObj.wind.speed;
         var windDeg   = Math.round(stationObj.weatherObj.wind.deg);
         var temp      = stationObj.weatherObj.main.temp;
-        var tempType  = F;
+        var tempType  = ATemp.F;
         var clouds    = stationObj.weatherObj.clouds.all;
         var humidity  = stationObj.weatherObj.main.humidity;
         var pressure  = stationObj.weatherObj.main.pressure;
@@ -557,12 +553,12 @@ function runPage()
         cardBody.append(tempDiv);
 
         var tempF = $("<div>");
-        tempF.html("<p>Fahrenheit: " + tempCalc(temp, F).toFixed(1) + "&#8457</p>");
+        tempF.html("<p>Fahrenheit: " + tempCalc(temp, ATemp.F).toFixed(1) + "&#8457</p>");
         tempF.attr("id", "temp-f" + idNum);
         tempDiv.append(tempF);
 
         var tempC = $("<div>");
-        tempC.html("<p>Celsius: " + tempCalc(temp, C).toFixed(1) + "&#8451</p>");
+        tempC.html("<p>Celsius: " + tempCalc(temp, ATemp.C).toFixed(1) + "&#8451</p>");
         tempC.attr("id", "temp-c" + idNum);
         tempDiv.append(tempC);
 
@@ -689,7 +685,8 @@ function runPage()
         refreshCan.height = 151;
         refreshDiv.append(refreshCan);
 
-        var timer = new ATimer(refreshCan, refreshCan.width, 610, CLOCK_STYLE_1, "#666666", null);
+        var timer = new ATimer(refreshCan, refreshCan.width, 610,
+                               ATimer.CLOCK_STYLE_1, "#666666", null);
         timer.startTimer();
 
         //Always update idNum so everything can have a unique ID.
@@ -947,7 +944,7 @@ function runPage()
     //Convert Kelvin to Celsius or Fahrenheit
     function tempCalc(temperature, convType)
     {
-        return convType === C ? temperature - 273.15 : temperature * 9/5 - 459.67;
+        return convType === ATemp.C ? temperature - 273.15 : temperature * 9/5 - 459.67;
     }
 
     //Set the humidity text.

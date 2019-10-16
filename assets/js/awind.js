@@ -1,14 +1,14 @@
 /**************************************** Wind Vane Class ****************************************/
-//Options bit flags.
-const HIDE_N           = 0x01; //Set = hide the letter N.
-const HIDE_ESW         = 0x02; //Set = hide the letters E, S and W.
-const HIDE_MAJOR_TICK2 = 0x04; //Set = hide the major ticks.
-const HIDE_MINOR_TICK2 = 0x08; //Set = hide the minor ticks.
-const HIDE_CENTER2     = 0x10; //Set = hide the center circle.
-const HIDE_ARROW       = 0x20; //Set = hide the arrow.
-
 class AWind
 {
+    //Options bit flags.
+    static get HIDE_N()         {return 0x01} //Set = hide the letter N.
+    static get HIDE_ESW()       {return 0x02} //Set = hide the letters E, S and W.
+    static get HIDE_MAJOR_TICK(){return 0x04} //Set = hide the major ticks.
+    static get HIDE_MINOR_TICK(){return 0x08} //Set = hide the minor ticks.
+    static get HIDE_CENTER()    {return 0x10} //Set = hide the center circle.
+    static get HIDE_ARROW()     {return 0x20} //Set = hide the arrow.
+
     constructor
     (
         //canvas in the only required parameter in the constructor.  It is the reference to the
@@ -92,7 +92,7 @@ class AWind
         var thisTheta;
 
         //Check if minor ticks are enabled.
-        if(!(this.options & HIDE_MINOR_TICK2))
+        if(!(this.options & AWind.HIDE_MINOR_TICK))
         {
             //Prepare to draw 8 minor ticks.
             thisTheta = 0;
@@ -112,7 +112,7 @@ class AWind
         }
 
         //Check if major ticks are enabled.
-        if(!(this.options & HIDE_MAJOR_TICK2))
+        if(!(this.options & AWind.HIDE_MAJOR_TICK))
         {
             //Prepare to draw 4 major ticks.
             thisTheta = Math.PI / 4;
@@ -128,7 +128,7 @@ class AWind
         }
 
         //Check if the letter N are enabled.
-        if(!(this.options & HIDE_N))
+        if(!(this.options & AWind.HIDE_N))
         {
             //Draw N.
             var textSize = this.radius * this.nRatio;
@@ -139,7 +139,7 @@ class AWind
         }
 
         //Check if the letters E, S and W are enabled.
-        if(!(this.options & HIDE_ESW))
+        if(!(this.options & AWind.HIDE_ESW))
         {
             //Draw E, S, W.
             var textSize = this.radius * this.eswRatio;
@@ -154,7 +154,7 @@ class AWind
         }
 
         //Check if arrow is enabled.
-        if(!(this.options & HIDE_ARROW))
+        if(!(this.options & AWind.HIDE_ARROW))
         {
             //Draw the back shaft portion of the wind vane.
             this.drawLineAngle2(this.direction, this.direction, this.arrowColor,
@@ -185,7 +185,7 @@ class AWind
         }
 
         //Check if center is enabled.
-        if(!(this.options & HIDE_CENTER2))
+        if(!(this.options & AWind.HIDE_CENTER))
         {
             //Draw the center circle of the wind vane.
             this.drawArc(0, 2 * Math.PI, this.radius * this.centerWidth, this.centerColor,

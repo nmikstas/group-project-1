@@ -1,9 +1,10 @@
 /**************************************** GameTimer Class ****************************************/
-const CLOCK_STYLE_0 = 0;
-const CLOCK_STYLE_1 = 1;
-
 class ATimer
 {
+    static get CLOCK_STYLE_0(){return 0}   //Grey background.
+    static get CLOCK_STYLE_1(){return 1}   //Transparent background.
+    static get ANIM_TIME()    {return 500} //500ms between animations(2 frames per second).
+
     constructor(canvas, cnvsHeightWidth, timerSeconds, timerType, textColor, timeUpCallBack)
     {
         this.canvas = canvas;
@@ -24,12 +25,8 @@ class ATimer
         this.timeRemaining = timerSeconds;
         this.timeString;
 
-        //50 milliseconds between animations(20 frames per second).
-        //this.ANIM_TIME = 50;
-        this.ANIM_TIME = 500;
-
         //dTheta is the amount to update the angle every animation frame.
-        this.dTheta = 2*Math.PI / (1000 / this.ANIM_TIME * this.timerSeconds);
+        this.dTheta = 2*Math.PI / (1000 / ATimer.ANIM_TIME * this.timerSeconds);
     }
 
     /******************************** GameTimer Class Functions **********************************/
@@ -72,7 +69,7 @@ class ATimer
         this.timeRemaining = this.timerSeconds;
         this.startAng = -Math.PI/2;
         this.endAng = 0;
-        this.dTheta = 2*Math.PI / (1000 / this.ANIM_TIME * this.timerSeconds);
+        this.dTheta = 2*Math.PI / (1000 / ATimer.ANIM_TIME * this.timerSeconds);
     }
 
     //Convert seconds into minutes, seconds and thenths of a second.
@@ -130,7 +127,7 @@ class ATimer
         this.timeRemaining = this.timerSeconds;
         this.startAng = -Math.PI/2;
         this.endAng = 0;
-        this.dTheta = 2*Math.PI / (1000 / this.ANIM_TIME * this.timerSeconds);
+        this.dTheta = 2*Math.PI / (1000 / ATimer.ANIM_TIME * this.timerSeconds);
     }
 
     //Start the timer.
@@ -141,7 +138,7 @@ class ATimer
 
         //This is necessary to use setInterval in the class scope.
         var self = this;
-        this.intervalId = setInterval(function() { self.animateTime() }, this.ANIM_TIME);
+        this.intervalId = setInterval(function() { self.animateTime() }, ATimer.ANIM_TIME);
     }
 
     //Stop the timer.
@@ -177,10 +174,10 @@ class ATimer
         var circleColor = "rgb(" + circleColorRed + ", " + circleColorGreen + ", 0)";
 
         //Update the time remaining.
-        this.timeRemaining -= this.ANIM_TIME / 1000;
+        this.timeRemaining -= ATimer.ANIM_TIME / 1000;
 
         //Draw the timer graphics.
-        if(this.timerType === 0) //Circular with a Grey background.
+        if(this.timerType === ATimer.CLOCK_STYLE_0) //Circular with a Grey background.
         {
             this.ctx.clearRect(0, 0, this.cnvsHeightWidth, this.cnvsHeightWidth);
             this.drawPieSlice(0, 2*Math.PI, circleColor);
